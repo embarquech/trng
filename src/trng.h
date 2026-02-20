@@ -86,7 +86,7 @@ uint8_t trng_random8(uint8_t *out);
  *
  * @retval  0   Success.
  * @retval  1   Read failed, not initialized, or min >= max.
- * @note    Subject to modulo bias when (max - min + 1) is not a power of 2.
+ * @note    Uses rejection sampling to eliminate modulo bias.
  */
 uint8_t trng_randomRange(uint32_t *out, uint32_t min, uint32_t max);
 

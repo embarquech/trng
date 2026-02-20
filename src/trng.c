@@ -121,18 +121,36 @@ uint8_t trng_random8(uint8_t *out) {
  * @param  max  Upper bound (must be > min).
  * @retval TRNG_OK   Success.
  * @retval TRNG_NOK  Read failed, not initialized, or min >= max.
- * @note   Subject to modulo bias when (max - min + 1) is not a power of 2.
+ * @note   Uses rejection sampling to eliminate modulo bias.
  */
 // cppcheck-suppress unusedFunction
 uint8_t trng_randomRange(uint32_t *out, uint32_t min, uint32_t max) {
     uint8_t result = TRNG_NOK;
 
-    if ((out != NULL) && (min < max)) {
-        uint32_t val;
-        if (trng_random32(&val) == TRNG_OK) {
-            uint32_t range = (max - min) + 1U;
-            *out = min + (val % range);
-            result = TRNG_OK;
+    if ((out != NULL) && (min <= max)) {
+        uint32_t range = (max - min) + 1U;
+
+        // cppcheck-suppress knownConditionTrueFalse ; unsigned overflow possible
+        if (range == 0U) {
+            /* Full 32-bit range (overflow): any value is valid. */
+            result = trng_random32(out);
+        } else {
+            uint32_t val;
+            uint32_t threshold = (UINT32_MAX - range + 1U) % range;
+            uint8_t err = 0U;
+            uint8_t found = 0U;
+
+            while ((found == 0U) && (err == 0U)) {
+                if (trng_random32(&val) == TRNG_OK) {
+                    if (val >= threshold) {
+                        *out = min + (val % range);
+                        result = TRNG_OK;
+                        found = 1U;
+                    }
+                } else {
+                    err = 1U;
+                }
+            }
         }
     }
 
