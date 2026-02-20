@@ -1,0 +1,42 @@
+name: MISRA C check
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  push:
+  pull_request:
+jobs:
+  misra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install cppcheck
+        run: sudo apt-get install -y cppcheck
+      - name: MISRA C analysis (library)
+        run: |
+          cppcheck \
+            --enable=all \
+            --std=c99 \
+            --language=c \
+            --addon=misra \
+            --inline-suppr \
+            --error-exitcode=1 \
+            --suppress=missingIncludeSystem \
+            --suppress=misra-config \
+            --suppress=misra-c2012-17.3 \
+            --suppress=misra-c2012-8.7 \
+            --force \
+            src/
+      - name: Basic check (examples)
+        run: |
+          for f in $(find examples/ -name '*.ino'); do
+            cp "$f" "${f}.cpp"
+          done
+          cppcheck \
+            --enable=warning,style \
+            --std=c++17 \
+            --language=c++ \
+            --error-exitcode=1 \
+            --force \
+            examples/random/

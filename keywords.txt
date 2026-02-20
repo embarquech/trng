@@ -1,0 +1,12 @@
+# Class (KEYWORD1)
+trngClass	KEYWORD1
+TRNG	KEYWORD1
+
+# Methods (KEYWORD2)
+begin	KEYWORD2
+random32	KEYWORD2
+random16	KEYWORD2
+random8	KEYWORD2
+randomRange	KEYWORD2
+read128	KEYWORD2
+fillRandom	KEYWORD2
