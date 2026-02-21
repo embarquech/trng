@@ -342,14 +342,14 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>Pointer to a uint32_t. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">min</td><td>Lower bound. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">max</td><td>Upper bound (must be &gt; min). </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">max</td><td>Upper bound (must be &gt;= min). </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname">TRNG_OK</td><td>Success. </td></tr>
-    <tr><td class="paramname">TRNG_NOK</td><td>Read failed, not initialized, or min &gt;= max. </td></tr>
+    <tr><td class="paramname">TRNG_NOK</td><td>Read failed, not initialized, or min &gt; max. </td></tr>
   </table>
   </dd>
 </dl>
