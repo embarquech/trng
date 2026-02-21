@@ -7,7 +7,7 @@
  * dedicated hardware.
  *
  * @note    Only compatible with Arduino UNO R4 WiFi and R4 Minima.
- * @license LGPL-2.1
+ * @license LGPL-3.0
  *
  * @example random.ino
  ******************************************************************************/
@@ -82,10 +82,10 @@ uint8_t trng_random8(uint8_t *out);
  *
  * @param[out] out  Pointer to a uint32_t.
  * @param      min  Minimum value (inclusive).
- * @param      max  Maximum value (inclusive, must be > min).
+ * @param      max  Maximum value (inclusive, must be >= min).
  *
  * @retval  0   Success.
- * @retval  1   Read failed, not initialized, or min >= max.
+ * @retval  1   Read failed, not initialized, or min > max.
  * @note    Uses rejection sampling to eliminate modulo bias.
  */
 uint8_t trng_randomRange(uint32_t *out, uint32_t min, uint32_t max);
@@ -136,8 +136,8 @@ public:
     /** @brief Write a random 8-bit value into @p out. */
     bool random8(uint8_t *out)                      { return trng_random8(out) == TRNG_OK; }
     /** @brief Write a random value in [min, max] into @p out. */
-    bool randomRange(uint32_t *out, uint32_t mn, uint32_t mx)
-                                                    { return trng_randomRange(out, mn, mx) == TRNG_OK; }
+    bool randomRange(uint32_t *out, uint32_t min, uint32_t max)
+                                                    { return trng_randomRange(out, min, max) == TRNG_OK; }
     /** @brief Fill a buffer with random bytes. */
     bool fillRandom(uint8_t *buf, size_t len)       { return trng_fillRandom(buf, len) == TRNG_OK; }
 };

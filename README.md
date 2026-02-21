@@ -1,4 +1,7 @@
-# trng
+# TRNG
+
+[![Version](https://img.shields.io/github/v/release/embarquech/trng?color=blue)](https://github.com/embarquech/trng/releases)
+[![Arduino Library Manager](https://img.shields.io/badge/Arduino-Library%20Manager-blue)](https://www.arduino.cc/reference/en/libraries/)
 
 Hardware True Random Number Generator library for **Arduino UNO R4** (WiFi & Minima).
 
@@ -10,7 +13,7 @@ Uses the SCE5 TRNG peripheral on the Renesas RA4M1 to generate cryptographically
 #include <trng.h>
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(115200UL);
     TRNG.begin();
 }
 
@@ -19,7 +22,7 @@ void loop() {
     if (TRNG.random32(&val)) {
         Serial.println(val, HEX);
     }
-    delay(1000);
+    delay(1000UL);
 }
 ```
 
@@ -48,6 +51,6 @@ Full API documentation is available at [embarquech.github.io/trng](https://embar
 
 ## License
 
-LGPL-2.1 — See [LICENSE](LICENSE) for details.
+LGPL-3.0 — See [LICENSE](LICENSE) for details.
 
 This library depends on Renesas FSP (BSD-3-Clause).

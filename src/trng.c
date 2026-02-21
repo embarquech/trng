@@ -1,11 +1,15 @@
 /*******************************************************************************
  * @file    trng.c
- * @brief   trng library implementation.
+ * @brief   Hardware True Random Number Generator library for Arduino UNO R4.
+ *
+ * Implements the TRNG API using the SCE5 peripheral on the Renesas RA4M1 MCU.
+ * Generates cryptographically secure true random numbers via dedicated hardware.
  *
  * Compiled as C to avoid conflicts with Renesas FSP headers that use
  * C++ reserved keywords ("private", "public") as struct field names.
  *
- * @license LGPL-2.1
+ * @note    Only compatible with Arduino UNO R4 WiFi and R4 Minima.
+ * @license LGPL-3.0
  ******************************************************************************/
 #include "trng.h"
 #include <hw_sce_private.h>
@@ -62,9 +66,9 @@ uint8_t trng_random32(uint32_t *out) {
     uint8_t result = TRNG_NOK;
 
     if (out != NULL) {
-        uint32_t buf[4];
+        uint32_t buf[4U];
         if (trng_read128(buf) == TRNG_OK) {
-            *out = buf[0];
+            *out = buf[0U];
             result = TRNG_OK;
         }
     }
@@ -118,9 +122,9 @@ uint8_t trng_random8(uint8_t *out) {
  * @brief  Write a random value in [min, max] (inclusive) into @p out.
  * @param[out] out  Pointer to a uint32_t.
  * @param  min  Lower bound.
- * @param  max  Upper bound (must be > min).
+ * @param  max  Upper bound (must be >= min).
  * @retval TRNG_OK   Success.
- * @retval TRNG_NOK  Read failed, not initialized, or min >= max.
+ * @retval TRNG_NOK  Read failed, not initialized, or min > max.
  * @note   Uses rejection sampling to eliminate modulo bias.
  */
 // cppcheck-suppress unusedFunction
@@ -169,7 +173,7 @@ uint8_t trng_fillRandom(uint8_t *buf, size_t len) {
     uint8_t result = TRNG_NOK;
 
     if ((_initialized != 0U) && (buf != NULL)) {
-        uint32_t tmp[4];
+        uint32_t tmp[4U];
         size_t i = 0U;
         result = TRNG_OK;
 
